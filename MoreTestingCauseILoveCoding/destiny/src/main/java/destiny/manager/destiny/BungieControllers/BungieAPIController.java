@@ -44,27 +44,7 @@ public class BungieAPIController{
         String bungieAuthUrl = "https://www.bungie.net/en/OAuth/Authorize?client_id=" + clientID + "&response_type=code&redirect_uri=" + uri + "/callback";
         return new RedirectView(bungieAuthUrl);
     }
-
-//     @GetMapping("/callback")
-//     public void handleCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//         String oauthToken = request.getParameter("code");
-//         AccessToken accessToken = new AccessToken();
-//         accessToken.setToken(oauthToken);
-//         accessTokenRepository.save(accessToken);
-//         String accessTokenStr = getAccessTokenService.getAccessToken(oauthToken);
-//         accessToken.setToken(accessTokenStr);
-//         accessTokenRepository.save(accessToken);
-//         System.out.println(accessTokenStr);
-//         response.sendRedirect("/generate-token");
-//   }
-//     @GetMapping("/callback")
-//     public void handleCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//         String token = request.getParameter("code");
-//         AccessToken accessToken = new AccessToken();
-//         accessToken.setToken(token);
-//         accessTokenRepository.save(accessToken);
-//         response.sendRedirect("/data");
-//     }
+    
     @GetMapping("/callback")
     public void handleCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String oauthToken = request.getParameter("code");
