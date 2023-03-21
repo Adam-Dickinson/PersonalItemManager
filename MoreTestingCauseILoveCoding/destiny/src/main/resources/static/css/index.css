@@ -1,0 +1,17 @@
+body {
+  background-color: #9994b4;
+}
+.ffbf38 {
+  background-color: #388eff;
+}
+.auth-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 200px;
+  align-content: center;
+}
+div {
+  padding-top: 0.2rem;
+}
