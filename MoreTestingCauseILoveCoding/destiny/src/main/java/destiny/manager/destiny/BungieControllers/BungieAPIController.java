@@ -1,13 +1,10 @@
 package destiny.manager.destiny.BungieControllers;
 
-import java.io.Console;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -26,10 +23,12 @@ public class BungieAPIController{
     private String clientSecret;
     @Value("${security.oauth2.client-id}")
     private String clientID;
-    @Value("${security.oauth2.redirect.uri}")
+    @Value("${security.oauth2.redirect-uri}")
     private String redirectUri;
+
     @Autowired
     private AccessTokenRepository accessTokenRepository;
+
     @Autowired
     private GetAccessTokenService getAccessTokenService;
     
