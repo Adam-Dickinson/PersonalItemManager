@@ -23,7 +23,7 @@ public class GetAccessTokenService {
     private String clientSecret;
     @Value("${security.oauth2.client-id}")
     private String clientID;
-    @Value("${security.oauth2.redirect.uri}")
+    @Value("${security.oauth2.redirect-uri}")
     private String redirectUri;
 
     private static final RestTemplate restTemplate = new RestTemplate();
