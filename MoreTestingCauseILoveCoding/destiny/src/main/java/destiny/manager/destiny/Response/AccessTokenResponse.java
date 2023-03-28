@@ -5,12 +5,55 @@ import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+// public class AccessTokenResponse {
+//     @JsonProperty("access_token")
+//     private String accessToken;
+
+//     @JsonProperty("expires_in")
+//     private int expiresIn;
+
+//     public String getAccessToken() {
+//         return accessToken;
+//     }
+
+//     public void setAccessToken(String accessToken) {
+//         this.accessToken = accessToken;
+//     }
+@Entity
 public class AccessTokenResponse {
-    @JsonProperty("access_token")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "access_token")
     private String accessToken;
 
-    @JsonProperty("expires_in")
+    @Column(name = "expires_in")
     private int expiresIn;
+
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
+    @Column(name = "refresh_expires_in")
+    private int refreshExpiresIn;
+
+    @Column(name = "membership_id")
+    private String membershipId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getAccessToken() {
         return accessToken;
@@ -18,6 +61,38 @@ public class AccessTokenResponse {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public int getExpiresIn() {
+        return expiresIn;
+    }
+
+    public void setExpiresIn(int expiresIn) {
+        this.expiresIn = expiresIn;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public int getRefreshExpiresIn() {
+        return refreshExpiresIn;
+    }
+
+    public void setRefreshExpiresIn(int refreshExpiresIn) {
+        this.refreshExpiresIn = refreshExpiresIn;
+    }
+
+    public String getMembershipId() {
+        return membershipId;
+    }
+
+    public void setMembershipId(String membershipId) {
+        this.membershipId = membershipId;
     }
 
     public static AccessTokenResponse fromJson(String json) throws IOException {

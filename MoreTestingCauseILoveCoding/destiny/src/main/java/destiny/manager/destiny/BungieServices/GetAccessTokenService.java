@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import destiny.manager.destiny.Repositorys.AuthTokenRepository;
 import destiny.manager.destiny.Response.AccessTokenResponse;
 
 @Service
@@ -27,6 +28,8 @@ public class GetAccessTokenService {
     private String redirectUri;
 
     private static final RestTemplate restTemplate = new RestTemplate();
+
+    private AuthTokenRepository authTokenRepository;
 
     public String getAccessToken(String oauthToken) {
         // Set up headers and request body for token endpoint
@@ -44,11 +47,18 @@ public class GetAccessTokenService {
         // Check if response was successful and parse access token
         if (response.getStatusCode().is2xxSuccessful()) {
             String responseBody = response.getBody();
+
             System.out.println(responseBody); // Add this line to print the response body
             try {
                 AccessTokenResponse tokenResponse = AccessTokenResponse.fromJson(responseBody);
-                String accessToken = tokenResponse.getAccessToken();
-                return accessToken;
+                AccessTokenResponse accessToken = new AccessTokenResponse();
+                accessToken.setAccessToken(tokenResponse.getAccessToken());
+                accessToken.setExpiresIn(tokenResponse.getExpiresIn());
+                accessToken.setRefreshToken(tokenResponse.getRefreshToken());
+                accessToken.setRefreshExpiresIn(tokenResponse.getRefreshExpiresIn());
+                accessToken.setMembershipId(tokenResponse.getMembershipId());
+                authTokenRepository.save(accessToken);
+                return accessToken.getAccessToken();
             } catch (IOException e) {
             }
         }
