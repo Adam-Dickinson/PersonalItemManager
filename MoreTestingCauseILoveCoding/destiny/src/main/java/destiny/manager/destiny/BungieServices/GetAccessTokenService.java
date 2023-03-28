@@ -8,8 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import destiny.manager.destiny.Repositorys.AuthTokenRepository;
@@ -29,6 +33,7 @@ public class GetAccessTokenService {
 
     private static final RestTemplate restTemplate = new RestTemplate();
 
+    @Autowired
     private AuthTokenRepository authTokenRepository;
 
     public String getAccessToken(String oauthToken) {
@@ -47,20 +52,22 @@ public class GetAccessTokenService {
         // Check if response was successful and parse access token
         if (response.getStatusCode().is2xxSuccessful()) {
             String responseBody = response.getBody();
-
+            
             System.out.println(responseBody); // Add this line to print the response body
-            try {
-                AccessTokenResponse tokenResponse = AccessTokenResponse.fromJson(responseBody);
-                AccessTokenResponse accessToken = new AccessTokenResponse();
-                accessToken.setAccessToken(tokenResponse.getAccessToken());
-                accessToken.setExpiresIn(tokenResponse.getExpiresIn());
-                accessToken.setRefreshToken(tokenResponse.getRefreshToken());
-                accessToken.setRefreshExpiresIn(tokenResponse.getRefreshExpiresIn());
-                accessToken.setMembershipId(tokenResponse.getMembershipId());
-                authTokenRepository.save(accessToken);
-                return accessToken.getAccessToken();
-            } catch (IOException e) {
-            }
+            JSONObject json = new JSONObject(response.getBody());
+            String accessToken = json.getString("access_token");
+            int expiresIn = json.getInt("expires_in");
+            String refreshToken = json.getString("refresh_token");
+            int refreshExpiresIn = json.getInt("refresh_expires_in");
+            String membershipId = json.getString("membership_id");
+            AccessTokenResponse tokenResponse = new AccessTokenResponse();
+            tokenResponse.setAccessToken(accessToken);
+            tokenResponse.setExpiresIn(expiresIn);
+            tokenResponse.setRefreshToken(refreshToken);
+            tokenResponse.setRefreshExpiresIn(refreshExpiresIn);
+            tokenResponse.setMembershipId(membershipId);
+            authTokenRepository.save(tokenResponse);
+            return accessToken;
         }
         return null;
     }

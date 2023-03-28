@@ -2,7 +2,6 @@ package destiny.manager.destiny.Response;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.Column;
@@ -10,35 +9,23 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-// public class AccessTokenResponse {
-//     @JsonProperty("access_token")
-//     private String accessToken;
-
-//     @JsonProperty("expires_in")
-//     private int expiresIn;
-
-//     public String getAccessToken() {
-//         return accessToken;
-//     }
-
-//     public void setAccessToken(String accessToken) {
-//         this.accessToken = accessToken;
-//     }
 @Entity
+@Table(name = "access_token_response")
 public class AccessTokenResponse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "access_token")
+    @Column(name = "access_token", length = 500)
     private String accessToken;
 
     @Column(name = "expires_in")
     private int expiresIn;
 
-    @Column(name = "refresh_token")
+    @Column(name = "refresh_token", length = 500)
     private String refreshToken;
 
     @Column(name = "refresh_expires_in")
@@ -93,10 +80,5 @@ public class AccessTokenResponse {
 
     public void setMembershipId(String membershipId) {
         this.membershipId = membershipId;
-    }
-
-    public static AccessTokenResponse fromJson(String json) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json, AccessTokenResponse.class);
     }
 }
