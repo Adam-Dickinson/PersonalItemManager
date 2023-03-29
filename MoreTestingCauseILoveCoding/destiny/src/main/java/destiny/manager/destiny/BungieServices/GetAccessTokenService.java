@@ -8,10 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +33,6 @@ public class GetAccessTokenService {
     private AuthTokenRepository authTokenRepository;
 
     public String getAccessToken(String oauthToken) {
-        // Set up headers and request body for token endpoint
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.setBasicAuth(clientID, clientSecret);
@@ -45,15 +40,11 @@ public class GetAccessTokenService {
         String requestBody = String.format("grant_type=%s&code=%s&client_id=%s&redirect_uri=%s",
                 "authorization_code", oauthToken, clientID, redirectUri);
     
-        // Send request to token endpoint
         HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
         ResponseEntity<String> response = restTemplate.exchange("https://www.bungie.net/platform/app/oauth/token/", HttpMethod.POST, request, String.class);
     
-        // Check if response was successful and parse access token
         if (response.getStatusCode().is2xxSuccessful()) {
-            String responseBody = response.getBody();
             
-            System.out.println(responseBody); // Add this line to print the response body
             JSONObject json = new JSONObject(response.getBody());
             String accessToken = json.getString("access_token");
             int expiresIn = json.getInt("expires_in");

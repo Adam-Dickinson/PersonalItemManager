@@ -1,0 +1,71 @@
+{
+    "Response": {
+        "destinyMemberships": [
+            {
+                "LastSeenDisplayName": "AdamGamesYT",
+                "LastSeenDisplayNameType": 2,
+                "iconPath": "/img/theme/bungienet/icons/psnLogo.png",
+                "crossSaveOverride": 2,
+                "applicableMembershipTypes": [
+                    3,
+                    2
+                ],
+                "isPublic": true,
+                "membershipType": 2,
+                "membershipId": "4611686018458970301",
+                "displayName": "AdamGamesYT",
+                "bungieGlobalDisplayName": "Aspect",
+                "bungieGlobalDisplayNameCode": 990
+            },
+            {
+                "LastSeenDisplayName": "TheSelloutStreamer",
+                "LastSeenDisplayNameType": 3,
+                "iconPath": "/img/theme/bungienet/icons/steamLogo.png",
+                "crossSaveOverride": 2,
+                "applicableMembershipTypes": [],
+                "isPublic": true,
+                "membershipType": 3,
+                "membershipId": "4611686018489023878",
+                "displayName": "TheSelloutStreamer",
+                "bungieGlobalDisplayName": "Aspect",
+                "bungieGlobalDisplayNameCode": 990
+            }
+        ],
+        "primaryMembershipId": "4611686018458970301",
+        "bungieNetUser": {
+            "membershipId": "13135155",
+            "uniqueName": "Aspect#0990",
+            "displayName": "Aspect",
+            "profilePicture": 70432,
+            "profileTheme": 1000,
+            "userTitle": 0,
+            "successMessageFlags": "0",
+            "isDeleted": false,
+            "about": "",
+            "firstAccess": "2016-04-03T20:37:12.988Z",
+            "lastUpdate": "2022-03-12T19:20:13.956Z",
+            "context": {
+                "isFollowing": false,
+                "ignoreStatus": {
+                    "isIgnored": false,
+                    "ignoreFlags": 0
+                }
+            },
+            "psnDisplayName": "AdamGamesYT",
+            "showActivity": true,
+            "locale": "en",
+            "localeInheritDefault": false,
+            "showGroupMessaging": true,
+            "profilePicturePath": "/img/profile/avatars/default_avatar.gif",
+            "profileThemeName": "d2cover",
+            "userTitleDisplay": "Newbie",
+            "statusText": "",
+            "statusDate": "0001-01-01T00:00:00Z",
+            "blizzardDisplayName": "AdamGamesYT",
+            "steamDisplayName": "TheSelloutStreamer",
+            "twitchDisplayName": "Gaming_Asp3ct",
+            "cachedBungieGlobalDisplayName": "Aspect",
+            "cachedBungieGlobalDisplayNameCode": 990
+        }
+    }
+}

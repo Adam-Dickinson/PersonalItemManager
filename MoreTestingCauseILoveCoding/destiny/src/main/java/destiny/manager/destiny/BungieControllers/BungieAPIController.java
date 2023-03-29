@@ -11,7 +11,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import destiny.manager.destiny.AccessToken.AccessToken;
 import destiny.manager.destiny.BungieServices.GetAccessTokenService;
 import destiny.manager.destiny.Repositorys.AccessTokenRepository;
-import destiny.manager.destiny.Repositorys.AuthTokenRepository;
 import destiny.manager.destiny.Response.AccessTokenResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,14 +33,6 @@ public class BungieAPIController{
     @Autowired
     private GetAccessTokenService getAccessTokenService;
 
-    @Autowired
-    private AuthTokenRepository authTokenRepository;
-    
-    @GetMapping("/index")
-    public String index(){
-        return "index";
-    }
-
     @GetMapping("/authorize")
     public RedirectView authorize() {
         String uri = "https";
@@ -59,12 +50,6 @@ public class BungieAPIController{
         String accessTokenStr = getAccessTokenService.getAccessToken(oauthToken);
         AccessTokenResponse tokenResponse = new AccessTokenResponse();
         tokenResponse.setAccessToken(accessTokenStr);
-        response.sendRedirect("/generate-token");
+        response.sendRedirect("/display-user");
     }
-
-    @GetMapping("/generate-token")
-    public String data() {
-        return "landing";
-    }
-
 }

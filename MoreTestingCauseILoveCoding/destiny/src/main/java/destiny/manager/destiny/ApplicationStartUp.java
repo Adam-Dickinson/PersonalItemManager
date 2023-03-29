@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import destiny.manager.destiny.Repositorys.AccessTokenRepository;
 import destiny.manager.destiny.Repositorys.AuthTokenRepository;
+import destiny.manager.destiny.Repositorys.BungieUserRepository;
 
 @Component
 public class ApplicationStartUp implements ApplicationListener<ContextRefreshedEvent>{
@@ -15,16 +16,20 @@ public class ApplicationStartUp implements ApplicationListener<ContextRefreshedE
 
     private final AuthTokenRepository authTokenRepository;
 
+    private final BungieUserRepository bungieUserRepository;
+
     @Autowired
-    public ApplicationStartUp(AccessTokenRepository accessTokenRepository, AuthTokenRepository authTokenRepository){
+    public ApplicationStartUp(AccessTokenRepository accessTokenRepository, AuthTokenRepository authTokenRepository, BungieUserRepository bungieUserRepository){
         this.accessTokenRepository = accessTokenRepository;
         this.authTokenRepository = authTokenRepository;
+        this.bungieUserRepository = bungieUserRepository;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         accessTokenRepository.deleteAll();
         authTokenRepository.deleteAll();
+        bungieUserRepository.deleteAll();
     }
 
 }

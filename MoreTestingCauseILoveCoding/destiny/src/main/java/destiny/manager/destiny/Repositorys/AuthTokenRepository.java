@@ -8,4 +8,5 @@ import destiny.manager.destiny.Response.AccessTokenResponse;
 @Repository
 public interface AuthTokenRepository extends JpaRepository<AccessTokenResponse, Long> {
 
+    AccessTokenResponse findFirstByOrderByIdDesc();
 }
