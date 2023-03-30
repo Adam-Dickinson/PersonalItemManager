@@ -12,8 +12,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import destiny.manager.destiny.BungieServices.GetCurrentUserInfo;
 import destiny.manager.destiny.BungieServices.GetUserProfile;
+import destiny.manager.destiny.Repositorys.BungieUserProfileRepository;
 import destiny.manager.destiny.Repositorys.BungieUserRepository;
 import destiny.manager.destiny.Response.BungieUserInfo;
+import destiny.manager.destiny.Response.BungieUserLinkedProfiles;
 
 @Controller
 public class GetUserDataController {
@@ -26,6 +28,9 @@ public class GetUserDataController {
 
     @Autowired
     private GetUserProfile getUserProfile;
+
+    @Autowired
+    private BungieUserProfileRepository bungieUserProfileRepository;
 
     @RequestMapping("/display-user")
     public String userData(Model model, RedirectAttributes redirectAttributes) throws Exception {
@@ -52,8 +57,48 @@ public class GetUserDataController {
         return "redirect:/view-users";
     }
 
-    @GetMapping("/view-users")
-    public ResponseEntity<String> getUserProfileInfo() throws Exception{
-        return getUserProfile.getLinkedProfiles();
+    @RequestMapping("/view-users")
+    public String userProfile(Model model) throws Exception {
+        ResponseEntity<String> response = getUserProfile.getLinkedProfiles();
+        JSONObject json = new JSONObject(response.getBody());
+        JSONObject responseJson = json.getJSONObject("Response");
+        
+        JSONObject bnetMembership = responseJson.getJSONObject("bnetMembership");
+        for (int i = 0; i < bnetMembership.length(); i++) {
+            int membershipType = bnetMembership.getInt("membershipType");
+            String membershipId = bnetMembership.getString("membershipId");
+    
+            BungieUserLinkedProfiles bungieUserProfile = new BungieUserLinkedProfiles();
+            bungieUserProfile.setMembershipType(membershipType);
+            bungieUserProfile.setMembershipId(membershipId);
+            bungieUserProfileRepository.save(bungieUserProfile);
+
+        }
+        return "redirect:/profile-info";
+    }
+
+    // @GetMapping("/profile-info")
+    // public ResponseEntity<String> getUserProfile() throws Exception{
+    //     return getUserProfile.getDestinyProfile();
+    // }
+
+    @GetMapping("/profile-info")
+    public String userCharacterInfo(Model model) throws Exception {
+        ResponseEntity<String> response = getUserProfile.getDestinyProfile();
+        JSONObject json = new JSONObject(response.getBody());
+        JSONObject responseJson = json.getJSONObject("Response");
+        
+        JSONObject bnetMembership = responseJson.getJSONObject("bnetMembership");
+        for (int i = 0; i < bnetMembership.length(); i++) {
+            int membershipType = bnetMembership.getInt("membershipType");
+            String membershipId = bnetMembership.getString("membershipId");
+    
+            BungieUserLinkedProfiles bungieUserProfile = new BungieUserLinkedProfiles();
+            bungieUserProfile.setMembershipType(membershipType);
+            bungieUserProfile.setMembershipId(membershipId);
+            bungieUserProfileRepository.save(bungieUserProfile);
+
+        }
+        return "redirect:/profile-info";
     }
 }

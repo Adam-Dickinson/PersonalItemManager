@@ -1,0 +1,59 @@
+{
+    "Response": {
+        "responseMintedTimestamp": "2023-03-30T19:48:25.445Z",
+        "secondaryComponentsMintedTimestamp": "0001-01-01T00:00:00Z",
+        "profile": {
+            "data": {
+                "userInfo": {
+                    "crossSaveOverride": 2,
+                    "applicableMembershipTypes": [
+                        3,
+                        2
+                    ],
+                    "isPublic": true,
+                    "membershipType": 2,
+                    "membershipId": "4611686018458970301",
+                    "displayName": "AdamGamesYT",
+                    "bungieGlobalDisplayName": "Aspect",
+                    "bungieGlobalDisplayNameCode": 990
+                },
+                "dateLastPlayed": "2023-03-28T19:43:51Z",
+                "versionsOwned": 1023,
+                "characterIds": [
+                    "2305843009299534822",
+                    "2305843009300384601",
+                    "2305843009659014565"
+                ],
+                "seasonHashes": [
+                    2809059425,
+                    2809059424,
+                    2809059427,
+                    2809059426,
+                    2809059429,
+                    2809059428,
+                    2809059431,
+                    2809059430,
+                    2809059433,
+                    2809059432,
+                    2758726568,
+                    2758726569,
+                    2758726570,
+                    2758726571
+                ],
+                "eventCardHashesOwned": [
+                    3461628897
+                ],
+                "currentSeasonHash": 2758726568,
+                "currentSeasonRewardPowerCap": 1810,
+                "currentGuardianRank": 7,
+                "lifetimeHighestGuardianRank": 7
+            },
+            "privacy": 1
+        }
+    },
+    "ErrorCode": 1,
+    "ThrottleSeconds": 0,
+    "ErrorStatus": "Success",
+    "Message": "Ok",
+    "MessageData": {}
+}

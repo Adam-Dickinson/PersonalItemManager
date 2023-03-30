@@ -8,11 +8,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition;
 
 import destiny.manager.destiny.Repositorys.AuthTokenRepository;
+import destiny.manager.destiny.Repositorys.BungieUserProfileRepository;
 import destiny.manager.destiny.Repositorys.BungieUserRepository;
 import destiny.manager.destiny.Response.AccessTokenResponse;
 import destiny.manager.destiny.Response.BungieUserInfo;
+import destiny.manager.destiny.Response.BungieUserLinkedProfiles;
 
 @Service
 public class GetUserProfile {
@@ -21,6 +24,9 @@ public class GetUserProfile {
 
     @Autowired
     private BungieUserRepository bungieUserRepository;
+
+    @Autowired
+    private BungieUserProfileRepository bungieUserProfileRepository;
 
     @Value("${bungie.apiKey}")
     private String apiKey;
@@ -37,6 +43,21 @@ public class GetUserProfile {
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
         ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+        return response;
+    }
+
+    public ResponseEntity<String> getDestinyProfile() throws Exception{
+        AccessTokenResponse accessTokenResponse = authTokenRepository.findFirstByOrderByIdDesc();
+        BungieUserInfo bungieUserInfo = bungieUserRepository.findFirstByOrderByIdDesc();
+
+        String Uri = "https://bungie.net//Platform/Destiny2/" + bungieUserInfo.getMembershipType() + "/Profile/" + bungieUserInfo.getMembershipId() + "/?components=100";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-API-Key", apiKey);
+        headers.add("Authorization", "Bearer " + accessTokenResponse.getAccessToken());
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(Uri, HttpMethod.GET, entity, String.class);
         System.out.println(response);
         return response;
     }

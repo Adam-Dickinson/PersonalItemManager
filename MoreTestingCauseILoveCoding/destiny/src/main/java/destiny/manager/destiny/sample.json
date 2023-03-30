@@ -67,5 +67,10 @@
             "cachedBungieGlobalDisplayName": "Aspect",
             "cachedBungieGlobalDisplayNameCode": 990
         }
-    }
+    },
+    "ErrorCode": 1,
+    "ThrottleSeconds": 0,
+    "ErrorStatus": "Success",
+    "Message": "Ok",
+    "MessageData": {}
 }
