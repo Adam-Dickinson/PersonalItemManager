@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import destiny.manager.destiny.Repositorys.AccessTokenRepository;
 import destiny.manager.destiny.Repositorys.AuthTokenRepository;
+import destiny.manager.destiny.Repositorys.BungieUserCharacterRepository;
 import destiny.manager.destiny.Repositorys.BungieUserProfileRepository;
 import destiny.manager.destiny.Repositorys.BungieUserRepository;
 
@@ -21,12 +22,15 @@ public class ApplicationStartUp implements ApplicationListener<ContextRefreshedE
 
     private final BungieUserProfileRepository bungieUserProfileRepository;
 
+    private final BungieUserCharacterRepository bungieUserCharacterRepository;
+
     @Autowired
-    public ApplicationStartUp(AccessTokenRepository accessTokenRepository, AuthTokenRepository authTokenRepository, BungieUserRepository bungieUserRepository, BungieUserProfileRepository bungieUserProfileRepository){
+    public ApplicationStartUp(AccessTokenRepository accessTokenRepository, AuthTokenRepository authTokenRepository, BungieUserRepository bungieUserRepository, BungieUserProfileRepository bungieUserProfileRepository, BungieUserCharacterRepository bungieUserCharacterRepository){
         this.accessTokenRepository = accessTokenRepository;
         this.authTokenRepository = authTokenRepository;
         this.bungieUserRepository = bungieUserRepository;
         this.bungieUserProfileRepository = bungieUserProfileRepository;
+        this.bungieUserCharacterRepository = bungieUserCharacterRepository;
     }
 
     @Override
@@ -35,6 +39,7 @@ public class ApplicationStartUp implements ApplicationListener<ContextRefreshedE
         authTokenRepository.deleteAll();
         bungieUserRepository.deleteAll();
         bungieUserProfileRepository.deleteAll();
+        bungieUserCharacterRepository.deleteAll();
     }
 
 }

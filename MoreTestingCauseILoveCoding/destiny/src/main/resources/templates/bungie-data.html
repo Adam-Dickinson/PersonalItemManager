@@ -8,15 +8,10 @@
 </head>
 <body>
     <h1>Bungie API Test</h1>
-    <table>
-        <tr>
-            <th>Membership ID</th>
-            <td th:text="${membershipId}"></td>
-        </tr>
-        <tr>
-            <th>Membership Type</th>
-            <td th:text="${membershipType}"></td>
-        </tr>
-    </table>
+    <h2>Guardian Rank: <span th:text="${guardianRank}"></span></h2>
+    <h2>Character Ids:</h2>
+    <ul>
+        <li th:each="id : ${characterIds}" th:text="${id}"></li>
+    </ul>
 </body>
 </html>

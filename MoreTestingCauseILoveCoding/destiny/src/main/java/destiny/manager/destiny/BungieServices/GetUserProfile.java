@@ -58,7 +58,6 @@ public class GetUserProfile {
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
         ResponseEntity<String> response = restTemplate.exchange(Uri, HttpMethod.GET, entity, String.class);
-        System.out.println(response);
         return response;
     }
 }

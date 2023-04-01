@@ -1,5 +1,8 @@
 package destiny.manager.destiny.BungieControllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import destiny.manager.destiny.BungieServices.GetCurrentUserInfo;
 import destiny.manager.destiny.BungieServices.GetUserProfile;
+import destiny.manager.destiny.Repositorys.BungieUserCharacterRepository;
 import destiny.manager.destiny.Repositorys.BungieUserProfileRepository;
 import destiny.manager.destiny.Repositorys.BungieUserRepository;
+import destiny.manager.destiny.Response.BungieUserCharacterInfo;
 import destiny.manager.destiny.Response.BungieUserInfo;
 import destiny.manager.destiny.Response.BungieUserLinkedProfiles;
 
@@ -31,6 +36,9 @@ public class GetUserDataController {
 
     @Autowired
     private BungieUserProfileRepository bungieUserProfileRepository;
+
+    @Autowired
+    private BungieUserCharacterRepository bungieUserCharacterRepository;
 
     @RequestMapping("/display-user")
     public String userData(Model model, RedirectAttributes redirectAttributes) throws Exception {
@@ -77,28 +85,32 @@ public class GetUserDataController {
         return "redirect:/profile-info";
     }
 
-    // @GetMapping("/profile-info")
-    // public ResponseEntity<String> getUserProfile() throws Exception{
-    //     return getUserProfile.getDestinyProfile();
-    // }
-
-    @GetMapping("/profile-info")
+    @RequestMapping("/profile-info")
     public String userCharacterInfo(Model model) throws Exception {
         ResponseEntity<String> response = getUserProfile.getDestinyProfile();
         JSONObject json = new JSONObject(response.getBody());
         JSONObject responseJson = json.getJSONObject("Response");
         
-        JSONObject bnetMembership = responseJson.getJSONObject("bnetMembership");
-        for (int i = 0; i < bnetMembership.length(); i++) {
-            int membershipType = bnetMembership.getInt("membershipType");
-            String membershipId = bnetMembership.getString("membershipId");
-    
-            BungieUserLinkedProfiles bungieUserProfile = new BungieUserLinkedProfiles();
-            bungieUserProfile.setMembershipType(membershipType);
-            bungieUserProfile.setMembershipId(membershipId);
-            bungieUserProfileRepository.save(bungieUserProfile);
-
+        JSONArray characterIdsJson = responseJson.getJSONObject("profile")
+                .getJSONObject("data")
+                .getJSONArray("characterIds");
+        List<String> characterIds = new ArrayList<>();
+        for (int i = 0; i < characterIdsJson.length(); i++) {
+            characterIds.add(characterIdsJson.getString(i));
         }
-        return "redirect:/profile-info";
+
+        Integer guardianRank = responseJson.getJSONObject("profile")
+                .getJSONObject("data")
+                .getInt("currentGuardianRank");
+
+        model.addAttribute("characterIds", characterIds);
+        model.addAttribute("guardianRank", guardianRank);
+        
+        BungieUserCharacterInfo bungieUserCharacterInfo = new BungieUserCharacterInfo();
+        bungieUserCharacterInfo.setCurrentGuardianRank(guardianRank);
+        bungieUserCharacterInfo.setCharacterIds(characterIds);
+        bungieUserCharacterRepository.save(bungieUserCharacterInfo);
+
+        return "redirect:/character-inventory";
     }
 }
