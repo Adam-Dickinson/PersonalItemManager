@@ -77,28 +77,28 @@ public class GetUserDataController {
         return "redirect:/profile-info";
     }
 
-    // @GetMapping("/profile-info")
-    // public ResponseEntity<String> getUserProfile() throws Exception{
-    //     return getUserProfile.getDestinyProfile();
-    // }
-
     @GetMapping("/profile-info")
-    public String userCharacterInfo(Model model) throws Exception {
-        ResponseEntity<String> response = getUserProfile.getDestinyProfile();
-        JSONObject json = new JSONObject(response.getBody());
-        JSONObject responseJson = json.getJSONObject("Response");
-        
-        JSONObject bnetMembership = responseJson.getJSONObject("bnetMembership");
-        for (int i = 0; i < bnetMembership.length(); i++) {
-            int membershipType = bnetMembership.getInt("membershipType");
-            String membershipId = bnetMembership.getString("membershipId");
-    
-            BungieUserLinkedProfiles bungieUserProfile = new BungieUserLinkedProfiles();
-            bungieUserProfile.setMembershipType(membershipType);
-            bungieUserProfile.setMembershipId(membershipId);
-            bungieUserProfileRepository.save(bungieUserProfile);
-
-        }
-        return "redirect:/profile-info";
+    public ResponseEntity<String> getUserProfile() throws Exception{
+        return getUserProfile.getDestinyProfile();
     }
+
+    // @GetMapping("/profile-info")
+    // public String userCharacterInfo(Model model) throws Exception {
+    //     ResponseEntity<String> response = getUserProfile.getDestinyProfile();
+    //     JSONObject json = new JSONObject(response.getBody());
+    //     JSONObject responseJson = json.getJSONObject("Response");
+        
+    //     JSONObject bnetMembership = responseJson.getJSONObject("bnetMembership");
+    //     for (int i = 0; i < bnetMembership.length(); i++) {
+    //         int membershipType = bnetMembership.getInt("membershipType");
+    //         String membershipId = bnetMembership.getString("membershipId");
+    
+    //         BungieUserLinkedProfiles bungieUserProfile = new BungieUserLinkedProfiles();
+    //         bungieUserProfile.setMembershipType(membershipType);
+    //         bungieUserProfile.setMembershipId(membershipId);
+    //         bungieUserProfileRepository.save(bungieUserProfile);
+
+    //     }
+    //     return "redirect:/profile-info";
+    // }
 }
