@@ -1,0 +1,62 @@
+{
+    "Response": {
+        "character": {
+            "data": {
+                "membershipId": "4611686018458970301",
+                "membershipType": 2,
+                "characterId": "2305843009659014565",
+                "dateLastPlayed": "2023-03-21T18:36:38Z",
+                "minutesPlayedThisSession": "33",
+                "minutesPlayedTotal": "22746",
+                "light": 1738,
+                "stats": {
+                    "1935470627": 1738,
+                    "2996146975": 32,
+                    "392767087": 101,
+                    "1943323491": 102,
+                    "1735777505": 104,
+                    "144602215": 26,
+                    "4244567218": 39
+                },
+                "raceHash": 2803282938,
+                "genderHash": 2204441813,
+                "classHash": 3655393761,
+                "raceType": 1,
+                "classType": 0,
+                "genderType": 1,
+                "emblemPath": "/common/destiny2_content/icons/de052aec1306777be98e7a8050bcbfb4.jpg",
+                "emblemBackgroundPath": "/common/destiny2_content/icons/e557385d8d93befb9f91c2d0d97b224c.jpg",
+                "emblemHash": 383734232,
+                "emblemColor": {
+                    "red": 0,
+                    "green": 0,
+                    "blue": 2,
+                    "alpha": 255
+                },
+                "levelProgression": {
+                    "progressionHash": 1716568313,
+                    "dailyProgress": 0,
+                    "dailyLimit": 0,
+                    "weeklyProgress": 0,
+                    "weeklyLimit": 0,
+                    "currentProgress": 0,
+                    "level": 50,
+                    "levelCap": 50,
+                    "stepIndex": 50,
+                    "progressToNextLevel": 0,
+                    "nextLevelAt": 0
+                },
+                "baseCharacterLevel": 50,
+                "percentToNextLevel": 0.0,
+                "titleRecordHash": 3097916612
+            },
+            "privacy": 1
+        },
+        "uninstancedItemComponents": {}
+    },
+    "ErrorCode": 1,
+    "ThrottleSeconds": 0,
+    "ErrorStatus": "Success",
+    "Message": "Ok",
+    "MessageData": {}
+}

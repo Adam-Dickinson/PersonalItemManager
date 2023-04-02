@@ -1,17 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Character List</title>
 </head>
 <body>
-    <h1>Bungie API Test</h1>
-    <h2>Guardian Rank: <span th:text="${guardianRank}"></span></h2>
-    <h2>Character Ids:</h2>
-    <ul>
-        <li th:each="id : ${characterIds}" th:text="${id}"></li>
-    </ul>
+    <h1>Character List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Level</th>
+                <th>Race</th>
+                <th>Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="character : ${characters}">
+                <td th:text="${character.Response.character.data.light}"></td>
+                <!-- <td th:text="${character.level}"></td>
+                <td th:text="${character.race}"></td>
+                <td th:text="${character.class}"></td> -->
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

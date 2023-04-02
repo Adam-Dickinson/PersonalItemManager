@@ -31,7 +31,6 @@ public class GetCurrentUserInfo {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
-        System.out.println(response);
         return response;
     }
 }

@@ -1,7 +1,9 @@
 package destiny.manager.destiny.BungieControllers;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,7 @@ public class CharacterInventoryController {
     private GetCharacterInventory getCharacterInventory;
     
     @GetMapping("/character-inventory")
-    public ResponseEntity<String> getCharacterInventory() throws Exception{
+    public ResponseEntity<Map<String, List<Long>>> getCharacterInventory() throws Exception{
         return getCharacterInventory.getCharacterInventory();
     }
 }
