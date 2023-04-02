@@ -110,6 +110,6 @@ public class GetUserDataController {
         bungieUserCharacterInfo.setCharacterIds(characterIds);
         bungieUserCharacterRepository.save(bungieUserCharacterInfo);
 
-        return "redirect:/character-inventory";
+        return "redirect:/characters-info";
     }
 }

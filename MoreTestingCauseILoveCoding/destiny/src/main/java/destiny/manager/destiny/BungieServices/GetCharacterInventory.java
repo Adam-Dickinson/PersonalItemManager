@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,6 @@ public class GetCharacterInventory {
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
         ResponseEntity<String> response = restTemplate.exchange(Uri, HttpMethod.GET, entity, String.class);
-        System.out.println(response);
         JSONObject json = new JSONObject(response.getBody());
         JSONObject responseJson = json.getJSONObject("Response");
         
@@ -62,16 +62,13 @@ public class GetCharacterInventory {
         return characterIds;
     } 
 
-    public List<JSONObject> getCharacters() throws Exception {
+    public List<String> getCharacterInfo(List<String> characterIds) throws Exception {
         AccessTokenResponse accessTokenResponse = authTokenRepository.findFirstByOrderByIdDesc();
         BungieUserInfo bungieUserInfo = bungieUserRepository.findFirstByOrderByIdDesc();
     
-        List<String> characterIds = getCharacterIds();
-        List<JSONObject> characters = new ArrayList<>();
-    
+        List<String> characterInfoResponses = new ArrayList<>();
         for (String characterId : characterIds) {
-            String Uri = "https://bungie.net//Platform/Destiny2/" + bungieUserInfo.getMembershipType() + "/Profile/" + bungieUserInfo.getMembershipId() + "/Character/" + characterId + "/?components=200";
-    
+            String Uri = "https://bungie.net/Platform/Destiny2/" + bungieUserInfo.getMembershipType() + "/Profile/" + bungieUserInfo.getMembershipId() + "/Character/" + characterId + "/?components=200";
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.add("X-API-Key", apiKey);
@@ -79,14 +76,36 @@ public class GetCharacterInventory {
             HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
     
             ResponseEntity<String> response = restTemplate.exchange(Uri, HttpMethod.GET, entity, String.class);
-            System.out.println(response);
-            JSONObject json = new JSONObject(response.getBody());
-            JSONObject responseJson = json.getJSONObject("Response");
-    
-            characters.add(responseJson);
+            characterInfoResponses.add(response.getBody());
         }   
-        return characters;
+        return characterInfoResponses;
     }
+
+    // public List<JSONObject> getCharacters() throws Exception {
+    //     AccessTokenResponse accessTokenResponse = authTokenRepository.findFirstByOrderByIdDesc();
+    //     BungieUserInfo bungieUserInfo = bungieUserRepository.findFirstByOrderByIdDesc();
+    
+    //     List<String> characterIds = getCharacterIds();
+    //     List<JSONObject> characters = new ArrayList<>();
+    
+    //     for (String characterId : characterIds) {
+    //         String Uri = "https://bungie.net//Platform/Destiny2/" + bungieUserInfo.getMembershipType() + "/Profile/" + bungieUserInfo.getMembershipId() + "/Character/" + characterId + "/?components=200";
+    
+    //         RestTemplate restTemplate = new RestTemplate();
+    //         HttpHeaders headers = new HttpHeaders();
+    //         headers.add("X-API-Key", apiKey);
+    //         headers.add("Authorization", "Bearer " + accessTokenResponse.getAccessToken());
+    //         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+    
+    //         ResponseEntity<String> response = restTemplate.exchange(Uri, HttpMethod.GET, entity, String.class);
+    //         JSONObject json = new JSONObject(response.getBody());
+    //         JSONObject responseJson = json.getJSONObject("Response");
+    
+    //         characters.add(responseJson);
+    //     }  
+    //     System.out.println(characters); 
+    //     return characters;
+    // }
 
     public ResponseEntity<Map<String, List<Long>>> getCharacterInventory() throws Exception {
         BungieUserInfo bungieUserInfo = bungieUserRepository.findFirstByOrderByIdDesc();

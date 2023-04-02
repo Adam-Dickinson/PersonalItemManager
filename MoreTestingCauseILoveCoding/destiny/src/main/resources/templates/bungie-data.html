@@ -1,27 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Character List</title>
-</head>
-<body>
-    <h1>Character List</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Level</th>
-                <th>Race</th>
-                <th>Class</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="character : ${characters}">
-                <td th:text="${character.Response.character.data.light}"></td>
-                <!-- <td th:text="${character.level}"></td>
-                <td th:text="${character.race}"></td>
-                <td th:text="${character.class}"></td> -->
-            </tr>
-        </tbody>
-    </table>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>My Page</title>
+    </head>
+    <body>
+        <h1 th:text="${title}">Page Title</h1>
+        <ul>
+            <li th:each="character : ${characters}">
+                <span th:text="${character.data.raceType}"></span>
+            </li>
+        </ul>
+    </body>
 </html>
