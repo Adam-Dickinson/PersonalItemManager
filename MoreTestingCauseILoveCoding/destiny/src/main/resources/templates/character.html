@@ -3,29 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Characters</title>
+    <link rel="stylesheet" href="character.css">
 </head>
 <body>
-    <h1>Characters</h1>
-    <table>
-        <thead>
-          <tr>
-            <th>Character Id</th>
-            <th>Light</th>
-            <th>Race Type</th>
-            <th>Class Type</th>
-          </tr>
-        </thead>
-        <tr th:each="character : ${characterInfo}">
-            <td th:text="${character.characterId}"></td>
-            <td th:text="${character.light}"></td>
-            <td th:if="${character.raceType} == 0">Human</td>
-            <td th:if="${character.raceType} == 1">Awoken</td>
-            <td th:if="${character.raceType} == 2">Exo</td>
-            <td th:if="${character.classType} == 0">Titan</td>
-            <td th:if="${character.classType} == 1">Hunter</td>
-            <td th:if="${character.classType} == 2">Warlock</td>
-          </tr>
-        </tbody>
-      </table>
+<div class="container">
+  <div class="character-section">
+    <div class="character-card">
+      <p>Character Card</p>
+    </div>
+    <div class="equipment">
+      <p>
+        Equipment
+      </p>
+    </div>
+  </div>
+  <div class="vault">
+    <div>
+      Vault
+    </div>
+  </div>
+</div>
 </body>
 </html>
