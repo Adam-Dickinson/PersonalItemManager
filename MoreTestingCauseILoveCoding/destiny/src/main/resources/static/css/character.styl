@@ -1,0 +1,27 @@
+// Variables
+borderColor = #ccc
+
+// Mixins
+addBorder()
+  border 1px solid borderColor
+
+// Styles
+.container
+  display flex
+  justify-content space-between
+  padding 1rem
+
+.character-section
+  width 50%
+  display flex
+  flex-direction column
+
+.character-card, .equipment
+  addBorder()
+  padding 1rem
+  margin-bottom 1rem
+
+.vault
+  width 50%
+  addBorder()
+  padding 1rem
