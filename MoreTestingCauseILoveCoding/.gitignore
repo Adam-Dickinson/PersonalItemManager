@@ -48,5 +48,6 @@ replay_pid*
 # Ignore all local history of files
 .history
 .ionide
+*node_modules/*
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,java,stylus
