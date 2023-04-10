@@ -9,7 +9,6 @@
   <div class="grid-x grid-padding-x">
     <div class="cell medium-6">
       <div class="callout">
-        <h4>Character Card</h4>
         <div class="grid-x grid-padding-x" th:each="character : ${characterInfo}">
           <div class="cell small-4">
             <div class="card">
@@ -26,6 +25,7 @@
                   <span th:if="${character.raceType} == 1">Awoken</span>
                   <span th:if="${character.raceType} == 2">Exo</span>
                 </p>
+                <a href="/authorize" class="button ffbf38" id="auth-button">View Inventory</a>
               </div>
             </div>
           </div>
@@ -33,6 +33,10 @@
       </div>
       <div class="callout">
         <h4>Equipment</h4>
+        <tr th:each="item : ${itemsInfo}">
+          <td th:text="${item.name}"></td>
+          <td><img th:src="@{'https://www.bungie.net' + ${item.icon}}" alt="Icon" /></td>
+      </tr>
       </div>
     </div>
     <div class="cell medium-6">

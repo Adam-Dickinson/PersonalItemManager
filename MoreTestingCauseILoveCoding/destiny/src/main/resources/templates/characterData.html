@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Character Data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.3/css/foundation.min.css" integrity="sha512-+sy8kbvCJGj3meoTTJQWlg+8Iv1uX+jnJr5r5V7Y8Avv+dQJxPmwihNPdIKFY7k8zvC5X9UNNbFwuSSTpA1Yng==" crossorigin="anonymous" />
+    <style>
+        .character-block {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            overflow: hidden;
+        }
+
+        .character-block img {
+            display: block;
+            margin: 10px auto;
+            max-width: 100%;
+        }
+
+        .character-block ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .character-block ul li {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .character-block ul li:first-child {
+            border-top: none;
+        }
+
+        .character-block ul li p {
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .character-block ul li img {
+            max-width: 50px;
+            margin-left: 10px;
+        }
+
+        .grid-x {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <h1>Character Data</h1>
+
+        <div class="grid-x grid-padding-x">
+            <div th:each="character : ${characterInfo}" class="cell small-12 medium-6 large-4 character-block">
+                <div class="card">
+                    <img th:src="@{'https://www.bungie.net' + ${character.emblemBackgroundPath}}" alt="Emblem" class="card-image">
+                    <div class="card-section">
+                        <h4>Character ID: <span th:text="${character.characterId}"></span></h4>
+                        <p>Light: <span th:text="${character.light}"></span></p>
+                        <p>Race Type: 
+                            <span th:if="${character.classType} == 0">Titan</span>
+                            <span th:if="${character.classType} == 1">Hunter</span>
+                            <span th:if="${character.classType} == 2">Warlock</span>
+                        </p>
+                        <p>Class Type: 
+                            <span th:if="${character.raceType} == 0">Human</span>
+                            <span th:if="${character.raceType} == 1">Awoken</span>
+                            <span th:if="${character.raceType} == 2">Exo</span>
+                        </p>
+                        <ul th:if="${itemsInfo.containsKey(character.characterId)}">
+                            <li th:each="item : ${itemsInfo.get(character.characterId)}">
+                                <p th:text="${item.name}"></p>
+                                <img th:src="@{'https://www.bungie.net' + ${item.icon}}" alt="Icon" class="card-icon" onclick="showItemName(this, '${item.name}')">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showItemName(imgElement, itemName) {
+        const nameElem = document.createElement('div');
+        nameElem.classList.add('item.name');
+        nameElem.textContent = itemName;
+        imgElement.parentNode.appendChild(nameElem);
+        setTimeout(() => {
+            nameElem.remove();
+        }, 3000);
+        }
+      </script>
+</body>
+</html>
