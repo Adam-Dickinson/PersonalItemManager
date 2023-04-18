@@ -5,6 +5,7 @@
     <title>Character Data</title>
     <link rel="stylesheet" th:href="@{/css/character.css}">
 </head>
+
 <body>
     <div class="top-bar">
         <div class="top-bar-left">
@@ -12,7 +13,7 @@
                 <li class="menu-text">Destiny 2 App</li>
                 <li><a href="#">Activities</a></li>
                 <li><a href="#">Vault</a></li>
-                <li><a href="/charactersUnequipt">Equipment</a></li>
+                <li><a href="#">Equipment</a></li>
             </ul>
         </div>
         <div class="top-bar-right">
@@ -25,7 +26,9 @@
         <div class="grid-x grid-padding-x">
             <div th:each="character : ${characterInfo}" class="cell small-12 medium-6 large-4 character-block">
                 <div class="card">
-                    <img th:src="@{'https://www.bungie.net' + ${character.emblemBackgroundPath}}" alt="Emblem" class="card-image" th:attr="data-character-id=${character.characterId}" onclick="showCharacterId(this, event)">
+                    <img th:src="@{'https://www.bungie.net' + ${character.emblemBackgroundPath}}" alt="Emblem"
+                        class="card-image" th:attr="data-character-id=${character.characterId}"
+                        onclick="showCharacterId(this)">
                     <div class="card-section">
                         <h4>Character ID: <span th:text="${character.characterId}"></span></h4>
                         <p>Light: <span th:text="${character.light}"></span></p>
@@ -47,17 +50,11 @@
                                         class="card-icon" onclick="showItemName(this)"></p>
                             </li>
                         </ul>
-                        <div class="overlay-menu" id="overlay-menu">
-                            <ul>
-                                <li><a href="#" id="go-to-vault">Vault</a></li>
-                                <li><a href="#" id="go-to-items">Items</a></li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script th:src="@{/js/character.js}"></script>
+    <script th:src="@{/js/characterUnequipt.js}"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package destiny.manager.destiny.BungieControllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import destiny.manager.destiny.BungieServices.GetCharacterInventory;
 
@@ -26,6 +28,7 @@ public class CharacterInventoryController {
         List<String> charactersResponse = getCharacterInventory.getCharacterInfo(characterIds);
         List<Map<String, Object>> characterInfo = new ArrayList<>();
         ResponseEntity<Map<String, List<JSONObject>>> itemDataList = getCharacterInventory.getCharacterInventory();
+        
 
         Map<String, List<JSONObject>> itemsJsonMap = itemDataList.getBody();
         Map<String, List<Map<String, String>>> itemsInfo = new HashMap<>();
@@ -37,9 +40,10 @@ public class CharacterInventoryController {
             for (JSONObject item : itemsJsonList) {
                 Map<String, String> itemData = new HashMap<>();
                 itemData.put("name", item.getString("name"));
-                itemData.put("icon", item.getString("icon"));
+                if (item.has("icon")) {
+                    itemData.put("icon", item.getString("icon"));
+                }
                 itemList.add(itemData);
-                System.out.println("item: " + item);
             }
             itemsInfo.put(characterId, itemList);
         }
@@ -65,6 +69,56 @@ public class CharacterInventoryController {
 
         model.addAttribute("characterInfo", characterInfo);
         model.addAttribute("itemsInfo", itemsInfo);
-        return "characterData";
+        return "character";
+    }
+
+    @GetMapping("/charactersUnequipt")
+    public String displayUniequiptItems(Model model) throws Exception {
+        List<String> characterIds = getCharacterInventory.getCharacterIds();
+        List<String> charactersResponse = getCharacterInventory.getCharacterInfo(characterIds);
+        List<Map<String, Object>> characterInfo = new ArrayList<>();
+        ResponseEntity<Map<String, List<JSONObject>>> itemDataList = getCharacterInventory.getCharacterEquipment();
+        
+
+        Map<String, List<JSONObject>> itemsJsonMap = itemDataList.getBody();
+        Map<String, List<Map<String, String>>> itemsInfo = new HashMap<>();
+
+        for (String characterId : itemsJsonMap.keySet()) {
+            List<JSONObject> itemsJsonList = itemsJsonMap.get(characterId);
+            List<Map<String, String>> itemList = new ArrayList<>();
+
+            for (JSONObject item : itemsJsonList) {
+                Map<String, String> itemData = new HashMap<>();
+                itemData.put("name", item.getString("name"));
+                if (item.has("icon")) {
+                    itemData.put("icon", item.getString("icon"));
+                }
+                itemList.add(itemData);
+            }
+            itemsInfo.put(characterId, itemList);
+        }
+
+        for (String character : charactersResponse) {
+            JSONObject characterJson = new JSONObject(character);
+            String membershipId = characterJson.getJSONObject("Response").getJSONObject("character").getJSONObject("data").getString("membershipId");
+            String characterId = characterJson.getJSONObject("Response").getJSONObject("character").getJSONObject("data").getString("characterId");
+            Integer light = characterJson.getJSONObject("Response").getJSONObject("character").getJSONObject("data").getInt("light");
+            Integer raceType = characterJson.getJSONObject("Response").getJSONObject("character").getJSONObject("data").getInt("raceType");
+            Integer classType = characterJson.getJSONObject("Response").getJSONObject("character").getJSONObject("data").getInt("classType");
+            String emblemBackgroundPath = characterJson.getJSONObject("Response").getJSONObject("character").getJSONObject("data").getString("emblemBackgroundPath");
+
+            Map<String, Object> characterData = new HashMap<>();
+            characterData.put("membershipId", membershipId);
+            characterData.put("characterId", characterId);
+            characterData.put("light", light);
+            characterData.put("raceType", raceType);
+            characterData.put("classType", classType);
+            characterData.put("emblemBackgroundPath", emblemBackgroundPath);
+            characterInfo.add(characterData);
+        }
+
+        model.addAttribute("characterInfo", characterInfo);
+        model.addAttribute("itemsInfo", itemsInfo);
+        return "characterUnequipt";
     }
 }

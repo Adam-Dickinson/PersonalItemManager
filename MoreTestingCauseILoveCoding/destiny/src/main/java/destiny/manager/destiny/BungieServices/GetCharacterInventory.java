@@ -113,15 +113,65 @@ public class GetCharacterInventory {
     
         JSONObject itemDataJson = new JSONObject(itemDataResponse);
         JSONObject displayProperties = itemDataJson.getJSONObject("Response").getJSONObject("displayProperties");
+        JSONObject inventory = itemDataJson.getJSONObject("Response").getJSONObject("inventory");
     
         String itemName = displayProperties.getString("name");
-        String iconUrl = displayProperties.getString("icon");
+        Integer bucketTypeHash = inventory.getInt("bucketTypeHash");
+    
+        String iconUrl = "";
+        if (displayProperties.has("icon")) {
+            iconUrl = displayProperties.getString("icon");
+        } else {
+        }
     
         JSONObject relevantData = new JSONObject();
         relevantData.put("name", itemName);
-        relevantData.put("icon", iconUrl);
-        
+        relevantData.put("bucketTypeHash", bucketTypeHash);
+        if (!iconUrl.isEmpty()) {
+            relevantData.put("icon", iconUrl);
+        }
+        System.out.println(relevantData);
         return relevantData;
+    }
+
+    public ResponseEntity<Map<String, List<JSONObject>>> getCharacterEquipment() throws Exception {
+        BungieUserInfo bungieUserInfo = bungieUserRepository.findFirstByOrderByIdDesc();
+        AccessTokenResponse accessTokenResponse = authTokenRepository.findFirstByOrderByIdDesc();
+    
+        List<String> characterIds = getCharacterIds();
+    
+        Map<String, List<JSONObject>> characterInventories = new HashMap<>();
+        for (String characterId : characterIds) {
+            String endpoint = "https://www.bungie.net/Platform/Destiny2/" + bungieUserInfo.getMembershipType() +
+                    "/Profile/" + bungieUserInfo.getMembershipId() + "/Character/" + characterId + "/?components=201";
+    
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("X-API-Key", apiKey);
+            headers.add("Authorization", "Bearer " + accessTokenResponse.getAccessToken());
+    
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+    
+            ResponseEntity<String> response = restTemplate.exchange(endpoint, HttpMethod.GET, entity, String.class);
+            String inventoryResponse = response.getBody();
+    
+            JSONObject inventoryJson = new JSONObject(inventoryResponse);
+            JSONArray itemsArray = inventoryJson.getJSONObject("Response")
+                    .getJSONObject("inventory")
+                    .getJSONObject("data")
+                    .getJSONArray("items");
+    
+            List<JSONObject> itemDataList = new ArrayList<>();
+            for (int i = 0; i < itemsArray.length(); i++) {
+                JSONObject itemJson = itemsArray.getJSONObject(i);
+                Long itemHash = itemJson.getLong("itemHash");
+                // Get item data based on the item hash and process it as needed
+                JSONObject itemData = getItemData(itemHash, accessTokenResponse.getAccessToken());
+                itemDataList.add(itemData);
+            }
+    
+            characterInventories.put(characterId, itemDataList);
+        }
+        return ResponseEntity.ok(characterInventories);
     }
 
     public ResponseEntity<Map<String, List<JSONObject>>> getCharacterInventory() throws Exception {
@@ -154,15 +204,34 @@ public class GetCharacterInventory {
             for (int i = 0; i < itemsArray.length(); i++) {
                 JSONObject itemJson = itemsArray.getJSONObject(i);
                 Long itemHash = itemJson.getLong("itemHash");
-    
                 // Get item data based on the item hash and process it as needed
                 JSONObject itemData = getItemData(itemHash, accessTokenResponse.getAccessToken());
                 itemDataList.add(itemData);
             }
     
             characterInventories.put(characterId, itemDataList);
-            // System.out.println(characterInventories);
         }
         return ResponseEntity.ok(characterInventories);
     }
+
+    public List<String> getUnequippedItemsForCharacter(List<String> characterIds) throws Exception {
+        AccessTokenResponse accessTokenResponse = authTokenRepository.findFirstByOrderByIdDesc();
+        BungieUserInfo bungieUserInfo = bungieUserRepository.findFirstByOrderByIdDesc();
+    
+        List<String> characterInfoResponses = new ArrayList<>();
+        for (String characterId : characterIds) {
+            String endpoint = "https://www.bungie.net/Platform/Destiny2/" + bungieUserInfo.getMembershipType() +
+                    "/Profile/" + bungieUserInfo.getMembershipId() + "/Character/" + characterId + "/?components=201";
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("X-API-Key", apiKey);
+            headers.add("Authorization", "Bearer " + accessTokenResponse.getAccessToken());
+            HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+    
+            ResponseEntity<String> response = restTemplate.exchange(endpoint, HttpMethod.GET, entity, String.class);
+            characterInfoResponses.add(response.getBody());
+        }   
+        return characterInfoResponses;
+    }
+
  }
