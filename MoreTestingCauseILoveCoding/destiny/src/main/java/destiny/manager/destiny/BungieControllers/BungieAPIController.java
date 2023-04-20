@@ -41,7 +41,7 @@ public class BungieAPIController{
     }
     
     @GetMapping("/callback")
-    public void handleCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void handleCallback(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String oauthToken = request.getParameter("code");
         AccessToken accessToken = new AccessToken();
         accessToken.setToken(oauthToken);

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Vault Data</title>
+    <link rel="stylesheet" th:href="@{/css/vault.css}">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <ul class="menu">
+                <li class="menu-text">Destiny 2 App</li>
+                <li><a href="#">Activities</a></li>
+                <li><a href="/vault">Vault</a></li>
+                <li><a href="/charactersUnequipt">Equipment</a></li>
+            </ul>
+        </div>
+        <div class="top-bar-right">
+            <ul class="menu">
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+    <h1>Vault Inventory</h1>
+    <div class="grid-x grid-padding-x">
+        <div th:each="itemTypeDisplayName : ${itemsInfo.keySet()}" class="cell small-12 medium-6 large-4 item-type-block">
+            <div class="card">
+                <div class="card-section">
+                    <h4 th:text="${itemTypeDisplayName}"></h4>
+                    <ul th:each="item : ${itemsInfo.get(itemTypeDisplayName)}">
+                        <li>
+                            <p th:text="${item.itemTypeDisplayName}"></p>
+                            <p th:text="${item.name}"></p>
+                            <p th:if="${item['icon'] != null}"><img
+                                    th:src="@{'https://www.bungie.net' + ${item['icon']}}" alt="Icon"
+                                    class="card-icon"></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/vault.js}"></script>
+</body>
+</html>

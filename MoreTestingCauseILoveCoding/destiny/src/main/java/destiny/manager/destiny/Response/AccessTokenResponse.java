@@ -1,5 +1,7 @@
 package destiny.manager.destiny.Response;
 
+import java.util.Base64;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,7 +41,8 @@ public class AccessTokenResponse {
     }
 
     public String getAccessToken() {
-        return accessToken;
+        // return accessToken;
+        return new String(Base64.getDecoder().decode(accessToken));
     }
 
     public void setAccessToken(String accessToken) {

@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import destiny.manager.destiny.Repositorys.AuthTokenRepository;
 import destiny.manager.destiny.Response.AccessTokenResponse;
 
+import java.util.Base64;
+
 @Service
 public class GetAccessTokenService {
     
@@ -32,7 +34,38 @@ public class GetAccessTokenService {
     @Autowired
     private AuthTokenRepository authTokenRepository;
 
-    public String getAccessToken(String oauthToken) {
+    // public String getAccessToken(String oauthToken) throws Exception {
+    //     HttpHeaders headers = new HttpHeaders();
+    //     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    //     headers.setBasicAuth(clientID, clientSecret);
+    
+    //     String requestBody = String.format("grant_type=%s&code=%s&client_id=%s&redirect_uri=%s",
+    //             "authorization_code", oauthToken, clientID, redirectUri);
+    
+    //     HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+    //     ResponseEntity<String> response = restTemplate.exchange("https://www.bungie.net/platform/app/oauth/token/", HttpMethod.POST, request, String.class);
+    
+    //     if (response.getStatusCode().is2xxSuccessful()) {
+            
+    //         JSONObject json = new JSONObject(response.getBody());
+    //         String accessToken = json.getString("access_token");
+    //         int expiresIn = json.getInt("expires_in");
+    //         String refreshToken = json.getString("refresh_token");
+    //         int refreshExpiresIn = json.getInt("refresh_expires_in");
+    //         String membershipId = json.getString("membership_id");
+    //         AccessTokenResponse tokenResponse = new AccessTokenResponse();
+    //         tokenResponse.setAccessToken(accessToken);
+    //         tokenResponse.setExpiresIn(expiresIn);
+    //         tokenResponse.setRefreshToken(refreshToken);
+    //         tokenResponse.setRefreshExpiresIn(refreshExpiresIn);
+    //         tokenResponse.setMembershipId(membershipId);
+    //         authTokenRepository.save(tokenResponse);
+    //         return accessToken;
+    //     }
+    //     return null;
+    // }
+
+    public String getAccessToken(String oauthToken) throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.setBasicAuth(clientID, clientSecret);
@@ -44,7 +77,7 @@ public class GetAccessTokenService {
         ResponseEntity<String> response = restTemplate.exchange("https://www.bungie.net/platform/app/oauth/token/", HttpMethod.POST, request, String.class);
     
         if (response.getStatusCode().is2xxSuccessful()) {
-            
+    
             JSONObject json = new JSONObject(response.getBody());
             String accessToken = json.getString("access_token");
             int expiresIn = json.getInt("expires_in");
@@ -52,13 +85,19 @@ public class GetAccessTokenService {
             int refreshExpiresIn = json.getInt("refresh_expires_in");
             String membershipId = json.getString("membership_id");
             AccessTokenResponse tokenResponse = new AccessTokenResponse();
-            tokenResponse.setAccessToken(accessToken);
+    
+            // Base64 encoding
+            String encodedAccessToken = Base64.getEncoder().encodeToString(accessToken.getBytes());
+            String decodedString = new String(Base64.getDecoder().decode(encodedAccessToken));
+    
+            tokenResponse.setAccessToken(encodedAccessToken);
             tokenResponse.setExpiresIn(expiresIn);
             tokenResponse.setRefreshToken(refreshToken);
             tokenResponse.setRefreshExpiresIn(refreshExpiresIn);
             tokenResponse.setMembershipId(membershipId);
             authTokenRepository.save(tokenResponse);
-            return accessToken;
+
+            return encodedAccessToken;
         }
         return null;
     }
