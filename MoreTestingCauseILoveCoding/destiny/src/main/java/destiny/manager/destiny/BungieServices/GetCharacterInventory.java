@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -117,6 +118,7 @@ public class GetCharacterInventory {
     
         ResponseEntity<String> itemResponse = restTemplate.exchange(itemEndpoint, HttpMethod.GET, itemEntity, String.class);
         String itemDataResponse = itemResponse.getBody();
+        System.out.println(itemDataResponse);
     
         JSONObject itemDataJson = new JSONObject(itemDataResponse);
         JSONObject displayProperties = itemDataJson.getJSONObject("Response").getJSONObject("displayProperties");
@@ -135,6 +137,7 @@ public class GetCharacterInventory {
         if (!iconUrl.isEmpty()) {
             relevantData.put("icon", iconUrl);
         }
+        System.out.println(relevantData);
         return relevantData;
     }
 
@@ -322,8 +325,12 @@ public class GetCharacterInventory {
                         CompletableFuture<String> bucketDataFuture = getBucketDataAsync(bucketHash, accessTokenResponse.getAccessToken());
             
                         CompletableFuture<JSONObject> itemDataWithBucketName = itemDataFuture.thenCombine(bucketDataFuture, (itemData, bucketData) -> {
+                            itemData.put("itemHash", itemHash);
+                            itemData.put("itemInstanceId", 
+                            itemJson.getLong("itemInstanceId")); // Make sure you're getting the correct itemInstanceId from the API response
                             itemData.put("bucketName", bucketData);
-                            return itemData;
+                            System.out.println(itemData);
+                            return itemData;                         
                         });
             
                         itemDataFutures.add(itemDataWithBucketName);
@@ -372,8 +379,13 @@ public class GetCharacterInventory {
     
         CompletableFuture.allOf(itemDataFutures.toArray(new CompletableFuture[0])).join();
         List<JSONObject> itemDataList = itemDataFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
+        List<JSONObject> filteredItemDataList = itemDataList.stream()
+                                .filter(item -> item.has("name"))
+                                .collect(Collectors.toList());
+
+        characterInventories.put(bungieUserInfo.getMembershipId(), filteredItemDataList);
     
-        characterInventories.put(bungieUserInfo.getMembershipId(), itemDataList);
+        // characterInventories.put(bungieUserInfo.getMembershipId(), itemDataList);
     
         return ResponseEntity.ok(characterInventories);
     }
@@ -411,6 +423,7 @@ public class GetCharacterInventory {
         }
         // Add itemTypeDisplayName to the relevantData
         relevantData.put("itemTypeDisplayName", itemTypeDisplayName);
+        System.out.println(relevantData);
         return relevantData;
     }
 
@@ -427,5 +440,84 @@ public class GetCharacterInventory {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    // public boolean transferItem(String itemHash, String itemInstanceId, String selectedCharacterId, String sendToCharacterId) {
+    //     AccessTokenResponse accessTokenResponse = authTokenRepository.findFirstByOrderByIdDesc();
+    //     System.out.println(accessTokenResponse);
+    //     // Bungie API endpoint for item transfer
+    //     String transferUrl = "https://www.bungie.net/Platform/Destiny2/Actions/Items/TransferItem/";
+    
+    //     // Prepare the request body
+    //     String requestBody = "{ \"itemReferenceHash\": " + itemHash + ", \"stackSize\": 1, \"transferToVault\": false, \"itemId\": " + itemInstanceId + ", \"characterId\": " + selectedCharacterId + ", \"membershipType\": 2, \"itemInstanceId\": " + itemInstanceId + ", \"characterIdToTransferTo\": " + sendToCharacterId + " }";
+    
+    //     // Set the request headers
+    //     HttpHeaders headers = new HttpHeaders();
+    //     headers.setContentType(MediaType.APPLICATION_JSON);
+    //     headers.set("X-API-Key", apiKey);
+    //     headers.set("Authorization", "Bearer " + accessTokenResponse.getAccessToken());
+    
+    //     // Create the request entity
+    //     HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+    
+    //     // Make the API call
+    //     RestTemplate restTemplate = new RestTemplate();
+    //     ResponseEntity<String> responseEntity = restTemplate.exchange(transferUrl, HttpMethod.POST, requestEntity, String.class);
+    
+    //     // Check the response status code
+    //     if (responseEntity.getStatusCode().is2xxSuccessful()) {
+    //       // Item transfer was successful
+    //       return true;
+    //     } else {
+    //       // Item transfer failed
+    //       return false;
+    //     }
+    //   }
+
+    public boolean transferItem(String itemReferenceHash, String itemInstanceId, String selectedCharacterId, String sendToCharacterId) {
+        AccessTokenResponse accessTokenResponse = authTokenRepository.findFirstByOrderByIdDesc();
+        BungieUserInfo bungieUserInfo = bungieUserRepository.findFirstByOrderByIdDesc();
+        System.out.println(accessTokenResponse);
+    
+        // Bungie API endpoint for item transfer
+        String transferUrl = "https://www.bungie.net/Platform/Destiny2/Actions/Items/TransferItem/";
+    
+        // Prepare the request body as a JSON object
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("itemReferenceHash", itemReferenceHash);
+        requestBody.put("itemId", 418462209);
+        requestBody.put("characterId", selectedCharacterId);
+        requestBody.put("membershipType", bungieUserInfo.getMembershipType());
+        requestBody.put("transferToVault", false);
+        requestBody.put("stackSize", 1);
+        requestBody.put("transferToVault", false);
+        requestBody.put("itemInstanceId", itemInstanceId);
+        requestBody.put("characterIdToTransferTo", sendToCharacterId);
+        requestBody.put("transferToVault", false);
+        
+
+        
+    
+        // Set the request headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("X-API-Key", apiKey);
+        headers.set("Authorization", "Bearer " + accessTokenResponse.getAccessToken());
+    
+        // Create the request entity
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody.toString(), headers);
+    
+        // Make the API call
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate.exchange(transferUrl, HttpMethod.POST, requestEntity, String.class);
+    
+        // Check the response status code
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            // Item transfer was successful
+            return true;
+        } else {
+            // Item transfer failed
+            return false;
+        }
     }
  }

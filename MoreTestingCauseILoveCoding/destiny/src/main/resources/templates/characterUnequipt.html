@@ -14,8 +14,8 @@
             <ul class="menu">
                 <li class="menu-text">Destiny 2 App</li>
                 <li><a href="#">Activities</a></li>
-                <li><a href="#">Vault</a></li>
-                <li><a href="/character">Equipment</a></li>
+                <li><a href="/vault">Vault</a></li>
+                <li><a href="/characters">Inventory</a></li>
             </ul>
         </div>
         <div class="top-bar-right">
@@ -24,7 +24,7 @@
             </ul>
         </div>
     </div>
-    <h1>Character unequipt items</h1>
+    <h1>Character unequipped items</h1>
     <div class="grid-x grid-padding-x">
         <div class="cell small-12">
             <input type="text" id="search-input" placeholder="Search for items..." onkeyup="searchItems()" />
@@ -33,40 +33,36 @@
     <div class="grid-x grid-padding-x">
         <div th:each="character : ${characterInfo}" class="cell small-12 medium-6 large-4 character-block">
             <div class="card">
-                <img th:src="@{'https://www.bungie.net' + ${character.emblemBackgroundPath}}" alt="Emblem"
-                    class="card-image" th:attr="data-character-id=${character.characterId}"
-                    onclick="showCharacterId(this, event)">
-                <div class="card-section">
-                    <p>Light: <span th:text="${character.light}"></span></p>
-                    <p>
-                        <span th:if="${character.classType} == 0">Titan</span>
-                        <span th:if="${character.classType} == 1">Hunter</span>
-                        <span th:if="${character.classType} == 2">Warlock</span>
-                    </p>
-                    <div th:if="${itemsInfo.containsKey(character.characterId)}">
-                        <div th:each="bucketEntry : ${itemsInfo.get(character.characterId).entrySet()}">
-                            <p class="bucket-name" th:text="${bucketEntry.key}"></p>
-                            <div class="bucket-icons">
-                                <div th:each="item : ${bucketEntry.value}">
-                                    <p th:text="${item.name}"></p>
-                                    <p th:if="${item['icon'] != null}">
-                                        <img th:src="@{'https://www.bungie.net' + ${item['icon']}}" alt="Icon"
-                                            class="bucket-icon" onclick="showItemName(this)">
-                                    </p>
-                                </div>
-                            </div>
+                <div class="emblem-icon-container">
+                    <img th:src="@{'https://www.bungie.net' + ${character.emblemBackgroundPath}}" alt="Emblem" class="card-image" th:attr="data-character-id=${character.characterId}" onclick="showCharacterId(this, event)">
+                    <div class="overlay">
+                        <div class="overlay-info">
+                            <span th:text="${character.light}"></span>
+                        </div>
+                        <div>
+                            <span th:if="${character.classType} == 0">Titan</span>
+                            <span th:if="${character.classType} == 1">Hunter</span>
+                            <span th:if="${character.classType} == 2">Warlock</span>
                         </div>
                     </div>
-                    <div class="overlay-menu" id="overlay-menu">
-                        <ul>
-                            <li><a href="#" id="go-to-vault">Vault</a></li>
-                            <li><a href="#" id="go-to-items">Items</a></li>
-                        </ul>
+                </div>
+                <div th:if="${itemsInfo.containsKey(character.characterId)}">
+                    <div th:each="bucketEntry : ${itemsInfo.get(character.characterId).entrySet()}"
+                        class="accordion">
+                        <p class="bucket-name" th:text="${bucketEntry.key}"></p>
+                        <div class="bucket-icons">
+                            <div th:each="item : ${bucketEntry.value}">
+                                <p th:text="${item.name}"></p>
+                                <p th:if="${item['icon'] != null}">
+                                    <img th:src="@{'https://www.bungie.net' + ${item['icon']}}" alt="Icon"
+                                        class="bucket-icon">
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <script th:src="@{/js/characterUnequipt.js}"></script>
 </body>

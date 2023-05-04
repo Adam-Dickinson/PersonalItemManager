@@ -48,22 +48,32 @@
                         <li th:each="item : ${itemsInfo.get(character.characterId)}">
                             <p th:text="${item.bucketName}"></p>
                             <p th:text="${item.name}"></p>
-                            <p th:if="${item['icon'] != null}"><img
-                                    th:src="@{'https://www.bungie.net' + ${item['icon']}}" alt="Icon"
-                                    class="card-icon" onclick="showItemName(this)"></p>
+                                    <p th:if="${item['icon'] != null}">
+                                        <img th:src="@{'https://www.bungie.net' + ${item['icon']}}"
+                                            alt="Icon"
+                                            class="card-icon"
+                                            th:data-item-hash="${item['itemHash']}"
+                                            th:data-item-instance-id="${item['itemInstanceId']}"
+                                            onclick="logItemInfo(this)">
+                                      </p>
                         </li>
                     </ul>
-                    <div class="overlay-menu" id="overlay-menu">
-                        <ul>
-                            <li><a href="#" id="go-to-vault">Vault</a></li>
-                            <li><a href="#" id="go-to-items">Items</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div id="transfer-modal" class="reveal" data-reveal>
+    <h2>Transfer</h2>
+    <div id="character-details">
+        <p>Class Type: <span id="character-class"></span></p>
+    </div>
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.3/js/foundation.min.js"></script>
 <script th:src="@{/js/character.js}"></script>
 </body>
 </html>

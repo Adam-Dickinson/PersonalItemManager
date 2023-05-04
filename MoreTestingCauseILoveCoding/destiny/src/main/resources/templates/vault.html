@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:java="http://www.thymeleaf.org/thymeleaf-extras-java8time">
 <head>
     <meta charset="UTF-8">
     <title>Vault Data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.7.3/css/foundation.min.css">
     <link rel="stylesheet" th:href="@{/css/vault.css}">
 </head>
 <body>
@@ -22,24 +24,43 @@
         </div>
     </div>
     <h1>Vault Inventory</h1>
-    <div class="grid-x grid-padding-x">
-        <div th:each="itemTypeDisplayName : ${itemsInfo.keySet()}" class="cell small-12 medium-6 large-4 item-type-block">
-            <div class="card">
-                <div class="card-section">
-                    <h4 th:text="${itemTypeDisplayName}"></h4>
-                    <ul th:each="item : ${itemsInfo.get(itemTypeDisplayName)}">
-                        <li>
-                            <p th:text="${item.itemTypeDisplayName}"></p>
-                            <p th:text="${item.name}"></p>
-                            <p th:if="${item['icon'] != null}"><img
-                                    th:src="@{'https://www.bungie.net' + ${item['icon']}}" alt="Icon"
-                                    class="card-icon"></p>
+    <div th:each="membershipIdEntry : ${itemsInfo.entrySet()}">
+        <div class="grid-x grid-padding-x">
+            <div th:each="itemTypeDisplayNameEntry : ${membershipIdEntry.value.entrySet()}"
+                class="cell small-12 medium-6 large-4 item-type-block">
+                <button class="accordion" th:text="${itemTypeDisplayNameEntry.key}"></button>
+                <div class="panel">
+                    <div class="grid-x grid-padding-x">
+                        <div th:each="item : ${itemTypeDisplayNameEntry.value}" class="cell small-6">
+                                <p th:if="${item.icon != null}">
+                                    <img th:src="@{'https://www.bungie.net' + ${item.icon}}" alt="Icon" class="card-icon">
+                                </p>
+                            </div>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-    <script th:src="@{/js/vault.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    });
+    /*]]>*/
+</script>
 </body>
 </html>
