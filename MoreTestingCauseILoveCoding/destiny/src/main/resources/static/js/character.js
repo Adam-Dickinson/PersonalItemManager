@@ -86,47 +86,6 @@ function showCharacterDetails(element) {
     }
 }
 
-// function logCharacterId(event) {
-//     const characterId = event.target.closest('.character-container').nextElementSibling.textContent.split(' ')[2];
-//     console.log('Send To Charcter:', characterId);
-// }
-
-// function logCharacterId(event) {
-//     const characterId = event.target.closest('.character-container').nextElementSibling.textContent.split(' ')[2];
-//     console.log('Send To Character:', characterId);
-  
-//     const itemHash = document.querySelector('.character-block .card-image').getAttribute('data-item-hash');
-//     const itemInstanceId = document.querySelector('.character-block .card-image').getAttribute('data-item-instance-id');
-//     const selectedCharacterId = document.querySelector('.character-block .card-image').getAttribute('data-character-id');
-  
-//     // Prepare the data object to send in the request body
-//     const requestData = {
-//       itemHash: itemHash,
-//       itemInstanceId: itemInstanceId,
-//       selectedCharacterId: selectedCharacterId,
-//       sendToCharacterId: characterId
-//     };
-  
-//     // Send the data to your backend API
-//     fetch('/api/transfer-item', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify(requestData)
-//     })
-//       .then(response => response.json())
-//       .then(data => {
-//         // Handle the response from the backend
-//         console.log('Transfer response:', data);
-//         // Perform any necessary UI updates based on the response
-//       })
-//       .catch(error => {
-//         // Handle any errors that occurred during the request
-//         console.error('Error:', error);
-//       });
-//   }
-
 function logCharacterId(event) {
     const characterId = event.target.closest('.character-container').nextElementSibling.textContent.split(' ')[2];
     console.log('Send To Character:', characterId);

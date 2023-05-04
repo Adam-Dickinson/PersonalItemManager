@@ -15,15 +15,15 @@
                 <li><a href="#">Activities</a></li>
                 <li><a href="/vault">Vault</a></li>
                 <li><a href="/charactersUnequipt">Equipment</a></li>
+                <li><a href="/vault">Refresh</a></li>
             </ul>
         </div>
         <div class="top-bar-right">
             <ul class="menu">
-                <li><a href="#">Logout</a></li>
+                <li><a href="/">Logout</a></li>
             </ul>
         </div>
     </div>
-    <h1>Vault Inventory</h1>
     <div th:each="membershipIdEntry : ${itemsInfo.entrySet()}">
         <div class="grid-x grid-padding-x">
             <div th:each="itemTypeDisplayNameEntry : ${membershipIdEntry.value.entrySet()}"
@@ -32,12 +32,14 @@
                 <div class="panel">
                     <div class="grid-x grid-padding-x">
                         <div th:each="item : ${itemTypeDisplayNameEntry.value}" class="cell small-6">
+                            <div class="item-container">
+                                <span th:text="${item.name}" class="item-name"></span>
                                 <p th:if="${item.icon != null}">
                                     <img th:src="@{'https://www.bungie.net' + ${item.icon}}" alt="Icon" class="card-icon">
-                                </p>
+                                </p>                             
                             </div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,6 +61,18 @@
                 }
             });
         }
+
+        function onItemIconClick() {
+        var itemHash = this.getAttribute("data-item-hash");
+        var itemInstanceId = this.getAttribute("data-item-instance-id");
+        console.log("itemHash:", itemHash, "itemInstanceId:", itemInstanceId);
+    }
+
+    // Add a click event listener for item icons
+    var itemIcons = document.getElementsByClassName("card-icon");
+    for (var i = 0; i < itemIcons.length; i++) {
+        itemIcons[i].addEventListener("click", onItemIconClick);
+    }
     });
     /*]]>*/
 </script>
